@@ -1,0 +1,492 @@
+import sys
+
+from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtGui import QIcon, QImage, QPainter, QPen
+from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, QFileDialog
+from PyQt5.QtWidgets import *
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from tkinter import *
+import time
+import random
+
+root = Tk()
+root.geometry("1920x1080+0+0")
+root.title("Restaurant System")
+
+f1 = Frame(root, width=1920, height=50, bg="powder blue", relief=SUNKEN)
+f1.pack(side=TOP)
+
+f2 = Frame(root, width=960, height=860, relief=SUNKEN)
+f2.pack(side=LEFT)
+
+f3 = Frame(root, width=660, height=860, relief=SUNKEN)
+f3.pack(side=RIGHT)
+
+localtime = ""
+
+mytime = Label(f1, font=("arial", 20, "bold"), text=localtime, fg="steel blue", bd=10, anchor=W)
+mytime.grid(row=1, column=0)
+
+
+def tick():
+    global localtime
+    time2 = time.asctime(time.localtime(time.time()))
+    if time2 != localtime:
+        localtime = time2
+        mytime.config(text=time2)
+    mytime.after(200, tick)
+
+
+label = Label(f1, font=("arial", 50, "bold"), text="Restaurant Management System", fg="steel blue", bd=10, anchor=W)
+label.grid(row=0, column=0)
+
+text_Input = StringVar()
+operator = ""
+
+
+def btnclick(num):
+    global operator
+    operator += str(num)
+    text_Input.set(operator)
+
+
+def btnequal():
+    global operator
+    sumof = str(eval(operator))
+    text_Input.set(sumof)
+    operator = ""
+
+
+def clear():
+    global operator
+    operator = ""
+    text_Input.set(operator)
+
+
+entry = Entry(f3, font=("arial", 35, "bold"), textvariable=text_Input, bd=20, insertwidth=4, bg="powder blue",
+              justify="right")
+entry.grid(columnspan=4)
+
+btn7 = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="7", bg="powder blue",
+              command=lambda: btnclick(7)).grid(row=2, column=0)
+btn8 = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="8", bg="powder blue",
+              command=lambda: btnclick(8)).grid(row=2, column=1)
+btn9 = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="9", bg="powder blue",
+              command=lambda: btnclick(9)).grid(row=2, column=2)
+btnadd = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="+", bg="powder blue",
+                command=lambda: btnclick("+")).grid(row=2, column=3)
+#########
+btn4 = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="4", bg="powder blue",
+              command=lambda: btnclick(4)).grid(row=3, column=0)
+btn5 = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="5", bg="powder blue",
+              command=lambda: btnclick(5)).grid(row=3, column=1)
+btn6 = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="6", bg="powder blue",
+              command=lambda: btnclick(6)).grid(row=3, column=2)
+btnmin = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="-", bg="powder blue",
+                command=lambda: btnclick("-")).grid(row=3, column=3)
+#########
+btn1 = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="1", bg="powder blue",
+              command=lambda: btnclick(1)).grid(row=4, column=0)
+btn2 = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="2", bg="powder blue",
+              command=lambda: btnclick(2)).grid(row=4, column=1)
+btn3 = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="3", bg="powder blue",
+              command=lambda: btnclick(3)).grid(row=4, column=2)
+btnmult = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="*", bg="powder blue",
+                 command=lambda: btnclick("*")).grid(row=4, column=3)
+#########
+btn0 = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="0", bg="powder blue",
+              command=lambda: btnclick(0)).grid(row=5, column=0)
+btnclear = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="C", bg="powder blue",
+                  command=lambda: clear()).grid(row=5, column=1)
+btneq = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="=", bg="powder blue",
+               command=lambda: btnequal()).grid(row=5, column=2)
+btnhil = Button(f3, padx=40, pady=40, bd=8, fg="black", font=("arial", 25, "bold"), text="/", bg="powder blue",
+                command=lambda: btnclick("/")).grid(row=5, column=3)
+
+rand = StringVar()
+Fries = StringVar()
+Burger = StringVar()
+ChickenBurger = StringVar()
+Filet = StringVar()
+IceCream = StringVar()
+Nuggets = StringVar()
+drinks = StringVar()
+cost = StringVar()
+service = StringVar()
+tax = StringVar()
+subtotal = StringVar()
+total = StringVar()
+
+
+def totalsum():
+    rand.set(str(random.randint(10908, 500876)))
+
+    q = Fries.get()
+    w = Burger.get()
+    e = ChickenBurger.get()
+    r = Filet.get()
+    t = IceCream.get()
+    y = Nuggets.get()
+    u = drinks.get()
+    CoF = int(q) * 5
+    CoB = int(w) * 7
+    CoChb = int(e) * 10
+    CoFi = int(r) * 7
+    CoIc = int(t) * 3
+    CoN = int(y) * 13
+    CoD = int(u) * 1
+
+    cost.set("$" + str(CoF + CoB + CoChb + CoFi + CoIc + CoN + CoD))
+    service.set((CoF + CoB + CoChb + CoFi + CoIc + CoN + CoD) * 0.1)
+    tax.set((CoF + CoB + CoChb + CoFi + CoIc + CoN + CoD) * 0.2)
+
+    z = cost.get()
+    subtotal.set(z)
+    total.set("$" + str(float(CoF + CoB + CoChb + CoFi + CoIc + CoN + CoD) + float(service.get()) + float(tax.get())))
+
+
+def reset():
+    rand.set("")
+    Fries.set("")
+    Burger.set("")
+    ChickenBurger.set("")
+    Filet.set("")
+    IceCream.set("")
+    Nuggets.set("")
+    drinks.set("")
+    cost.set("")
+    service.set("")
+    tax.set("")
+    subtotal.set("")
+    total.set("")
+
+
+def qExit():
+    root.destroy()
+
+
+lblreferance = Label(f2, font=("arial", 20, "bold"), text="Referance", fg="black", bd=16, anchor=W)
+lblreferance.grid(row=0, column=0)
+txtreferance = Entry(f2, font=("arial", 20, "bold"), textvariable=rand, bd=10, insertwidth=4, bg="powder blue",
+                     justify="left")
+txtreferance.grid(row=0, column=1)
+
+lblfries = Label(f2, font=("arial", 20, "bold"), text="Franch Fries", fg="black", bd=16, anchor=W)
+lblfries.grid(row=1, column=0)
+txtfries = Entry(f2, font=("arial", 20, "bold"), textvariable=Fries, bd=10, insertwidth=4, bg="powder blue",
+                 justify="left")
+txtfries.grid(row=1, column=1)
+
+lblburger = Label(f2, font=("arial", 20, "bold"), text="Hamburger", fg="black", bd=16, anchor=W)
+lblburger.grid(row=2, column=0)
+txtburger = Entry(f2, font=("arial", 20, "bold"), textvariable=Burger, bd=10, insertwidth=4, bg="powder blue",
+                  justify="left")
+txtburger.grid(row=2, column=1)
+
+lblchkburger = Label(f2, font=("arial", 20, "bold"), text="Chicken Burger", fg="black", bd=16, anchor=W)
+lblchkburger.grid(row=3, column=0)
+txtchkburger = Entry(f2, font=("arial", 20, "bold"), textvariable=ChickenBurger, bd=10, insertwidth=4, bg="powder blue",
+                     justify="left")
+txtchkburger.grid(row=3, column=1)
+
+lblfilet = Label(f2, font=("arial", 20, "bold"), text="Filet", fg="black", bd=16, anchor=W)
+lblfilet.grid(row=4, column=0)
+txtfilet = Entry(f2, font=("arial", 20, "bold"), textvariable=Filet, bd=10, insertwidth=4, bg="powder blue",
+                 justify="left")
+txtfilet.grid(row=4, column=1)
+
+lblIceCream = Label(f2, font=("arial", 20, "bold"), text="Ice Cream", fg="black", bd=16, anchor=W)
+lblIceCream.grid(row=5, column=0)
+txtIceCream = Entry(f2, font=("arial", 20, "bold"), textvariable=IceCream, bd=10, insertwidth=4, bg="powder blue",
+                    justify="left")
+txtIceCream.grid(row=5, column=1)
+
+lblNuggets = Label(f2, font=("arial", 20, "bold"), text="Chicken Nuggets", fg="black", bd=16, anchor=W)
+lblNuggets.grid(row=6, column=0)
+txtNuggets = Entry(f2, font=("arial", 20, "bold"), textvariable=Nuggets, bd=10, insertwidth=4, bg="powder blue",
+                   justify="left")
+txtNuggets.grid(row=6, column=1)
+
+lbldrinks = Label(f2, font=("arial", 20, "bold"), text="Drinks", fg="black", bd=16, anchor=W)
+lbldrinks.grid(row=0, column=2)
+txtdrinks = Entry(f2, font=("arial", 20, "bold"), textvariable=drinks, bd=10, insertwidth=4, bg="#FFFFFF",
+                  justify="left")
+txtdrinks.grid(row=0, column=3)
+
+lblcost = Label(f2, font=("arial", 20, "bold"), text="Cost of meal", fg="black", bd=16, anchor=W)
+lblcost.grid(row=1, column=2)
+txtcost = Entry(f2, font=("arial", 20, "bold"), textvariable=cost, bd=10, insertwidth=4, bg="#FFFFFF", justify="left")
+txtcost.grid(row=1, column=3)
+
+lblservice = Label(f2, font=("arial", 20, "bold"), text="Service Charge", fg="black", bd=16, anchor=W)
+lblservice.grid(row=2, column=2)
+txtservice = Entry(f2, font=("arial", 20, "bold"), textvariable=service, bd=10, insertwidth=4, bg="#FFFFFF",
+                   justify="left")
+txtservice.grid(row=2, column=3)
+
+lbltax = Label(f2, font=("arial", 20, "bold"), text="tax", fg="black", bd=16, anchor=W)
+lbltax.grid(row=3, column=2)
+txttax = Entry(f2, font=("arial", 20, "bold"), textvariable=tax, bd=10, insertwidth=4, bg="#FFFFFF", justify="left")
+txttax.grid(row=3, column=3)
+
+lblsubtotal = Label(f2, font=("arial", 20, "bold"), text="Sub Total", fg="black", bd=16, anchor=W)
+lblsubtotal.grid(row=4, column=2)
+txtsubtotal = Entry(f2, font=("arial", 20, "bold"), textvariable=subtotal, bd=10, insertwidth=4, bg="#FFFFFF",
+                    justify="left")
+txtsubtotal.grid(row=4, column=3)
+
+lbltotal = Label(f2, font=("arial", 20, "bold"), text="Total Cost", fg="black", bd=16, anchor=W)
+lbltotal.grid(row=6, column=2)
+txttotal = Entry(f2, font=("arial", 20, "bold"), textvariable=total, bd=10, insertwidth=4, bg="#FFFFFF", justify="left")
+txttotal.grid(row=6, column=3)
+
+Totalbtn = Button(f2, padx=60, pady=20, bd=8, fg="black", font=("arial", 25, "bold"), text="Total", bg="powder blue",
+                  command=lambda: totalsum()).grid(row=8, column=1)
+resetbtn = Button(f2, padx=60, pady=20, bd=8, fg="black", font=("arial", 25, "bold"), text="Reset", bg="powder blue",
+                  command=lambda: reset()).grid(row=8, column=2)
+quitbtn = Button(f2, padx=60, pady=20, bd=8, fg="black", font=("arial", 25, "bold"), text="Exit", bg="powder blue",
+                 command=lambda: qExit()).grid(row=8, column=3)
+
+tick()
+root.mainloop()
+
+
+class Window(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        title = "Paint Application"
+        top = 700
+        left = 300
+        width = 700
+        height = 500
+
+        icon = "icons/pain.png"
+
+        self.setWindowTitle(title)
+        self.setGeometry(top, left, width, height)
+        self.setWindowIcon(QIcon(icon))
+
+        self.image = QImage(self.size(), QImage.Format_RGB32)
+        self.image.fill(Qt.white)
+
+        self.drawing = False
+        self.brushSize = 2
+        self.brushColor = Qt.black
+        self.lastPoint = QPoint()
+
+        mainMenu = self.menuBar()
+        fileMenu = mainMenu.addMenu("File")
+        brushSize = mainMenu.addMenu("Brush Size")
+        brushColor = mainMenu.addMenu("Brush Color")
+        brushLine = mainMenu.addMenu("Brush Line")
+
+        saveAction = QAction(QIcon("icons/save.png"), "Save", self)
+        saveAction.setShortcut("Ctrl+S")
+        fileMenu.addAction(saveAction)
+        saveAction.triggered.connect(self.save)
+
+        clearAction = QAction(QIcon("icons/clear.png"), "Clear", self)
+        clearAction.setShortcut("Ctrl+C")
+        fileMenu.addAction(clearAction)
+        clearAction.triggered.connect(self.clear)
+
+        onepxAction = QAction(QIcon("icons/onepx.png"), "1px", self)
+        brushSize.addAction(onepxAction)
+        onepxAction.triggered.connect(self.onePixel)
+
+        threepxAction = QAction(QIcon("icons/threepx.png"), "3px", self)
+        brushSize.addAction(threepxAction)
+        threepxAction.triggered.connect(self.threePixel)
+
+        fivepxAction = QAction(QIcon("icons/fivepx.png"), "5px", self)
+        brushSize.addAction(fivepxAction)
+        fivepxAction.triggered.connect(self.fivePixel)
+
+        sevenpxAction = QAction(QIcon("icons/sevenpx.png"), "7px", self)
+        brushSize.addAction(sevenpxAction)
+        sevenpxAction.triggered.connect(self.sevenPixel)
+
+        ninepxAction = QAction(QIcon("icons/ninepx.png"), "9px", self)
+        brushSize.addAction(ninepxAction)
+        ninepxAction.triggered.connect(self.ninePixel)
+
+        elevenpxAction = QAction(QIcon("icons/ninepx.png"), "11px", self)
+        brushSize.addAction(elevenpxAction)
+        elevenpxAction.triggered.connect(self.elevenPixel)
+
+        thirteenpxAction = QAction(QIcon("icons/thirteenpx.png"), "13px", self)
+        brushSize.addAction(thirteenpxAction)
+        thirteenpxAction.triggered.connect(self.thirteenPixel)
+
+        fifteenpxAction = QAction(QIcon("icons/fifteenpx.png"), "15px", self)
+        brushSize.addAction(fifteenpxAction)
+        fifteenpxAction.triggered.connect(self.fifteenPixel)
+
+        blackAction = QAction(QIcon("icons/black.png"), "Black", self)
+        blackAction.setShortcut("Ctrl+B")
+        brushColor.addAction(blackAction)
+        blackAction.triggered.connect(self.blackColor)
+
+        whitekAction = QAction(QIcon("icons/white.png"), "White", self)
+        whitekAction.setShortcut("Ctrl+W")
+        brushColor.addAction(whitekAction)
+        whitekAction.triggered.connect(self.whiteColor)
+
+        redAction = QAction(QIcon("icons/red.png"), "Red", self)
+        redAction.setShortcut("Ctrl+R")
+        brushColor.addAction(redAction)
+        redAction.triggered.connect(self.redColor)
+
+        greenAction = QAction(QIcon("icons/green.png"), "Green", self)
+        greenAction.setShortcut("Ctrl+G")
+        brushColor.addAction(greenAction)
+        greenAction.triggered.connect(self.greenColor)
+
+        yellowAction = QAction(QIcon("icons/yellow.png"), "Yellow", self)
+        yellowAction.setShortcut("Ctrl+Y")
+        brushColor.addAction(yellowAction)
+        yellowAction.triggered.connect(self.yellowColor)
+
+        cyanAction = QAction(QIcon("icons/cyan.png"), "Cyan", self)
+        cyanAction.setShortcut("Ctrl+C")
+        brushColor.addAction(cyanAction)
+        cyanAction.triggered.connect(self.cyanColor)
+
+        magentaAction = QAction(QIcon("icons/magenta.png"), "Magenta", self)
+        magentaAction.setShortcut("Ctrl+M")
+        brushColor.addAction(magentaAction)
+        magentaAction.triggered.connect(self.magentaColor)
+
+        darkBlueAction = QAction(QIcon("icons/darkBlue.png"), "darkBlue", self)
+        darkBlueAction.setShortcut("Ctrl+D")
+        brushColor.addAction(darkBlueAction)
+        darkBlueAction.triggered.connect(self.darkBlueColor)
+
+        darkRedAction = QAction(QIcon("icons/darkRed.png"), "DarkRed", self)
+        darkRedAction.setShortcut("D")
+        brushColor.addAction(darkRedAction)
+        darkRedAction.triggered.connect(self.darkRedColor)
+
+        grayAction = QAction(QIcon("icons/gray.png"), "Gray", self)
+        grayAction.setShortcut("G")
+        brushColor.addAction(grayAction)
+        grayAction.triggered.connect(self.grayColor)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.drawing = True
+            self.lastPoint = event.pos()
+            # print(self.lastPoint)
+
+    def mouseMoveEvent(self, event):
+        if (event.buttons() & Qt.LeftButton) & self.drawing:
+            painter = QPainter(self.image)
+            painter.setPen(QPen(self.brushColor, self.brushSize, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+            painter.drawLine(self.lastPoint, event.pos())
+            self.lastPoint = event.pos()
+            self.update()
+
+    def mouseReleaseEvent(self, event):
+
+        if event.button() == Qt.LeftButton:
+            self.drawing = False
+
+    def paintEvent(self, event):
+        canvasPainter = QPainter(self)
+        canvasPainter.drawImage(self.rect(), self.image, self.image.rect())
+
+    def save(self):
+        filePath, _ = QFileDialog.getSaveFileName(self, "Save Image", "",
+                                                  "PNG(*.png);;JPEG(*.jpg *.jpeg);;All Files(*.*) ")
+
+        if filePath == "":
+            return
+        self.image.save(filePath)
+
+    def clear(self):
+        self.image.fill(Qt.white)
+        self.update()
+
+    def onePixel(self):
+        self.brushSize = 1
+
+    def threePixel(self):
+        self.brushSize = 3
+
+    def fivePixel(self):
+        self.brushSize = 5
+
+    def sevenPixel(self):
+        self.brushSize = 7
+
+    def ninePixel(self):
+        self.brushSize = 9
+
+    def elevenPixel(self):
+        self.brushSize = 11
+
+    def thirteenPixel(self):
+        self.brushSize = 13
+
+    def fifteenPixel(self):
+        self.brushSize = 15
+
+    def blackColor(self):
+        self.brushColor = Qt.black
+
+    def whiteColor(self):
+        self.brushColor = Qt.white
+
+    def redColor(self):
+        self.brushColor = Qt.red
+
+    def greenColor(self):
+        self.brushColor = Qt.green
+
+    def yellowColor(self):
+        self.brushColor = Qt.yellow
+
+    def cyanColor(self):
+        self.brushColor = Qt.cyan
+
+    def magentaColor(self):
+        self.brushColor = Qt.magenta
+
+    def darkBlueColor(self):
+        self.brushColor = Qt.darkBlue
+
+    def darkRedColor(self):
+        self.brushColor = Qt.darkRed
+
+    def grayColor(self):
+        self.brushColor = Qt.gray
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = Window()
+    window.show()
+    app.exec()
+
+
+class Window(QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("Calendar ")
+        self.setGeometry(100, 100, 600, 400)
+        self.UiComponents()
+        self.show()
+
+    def UiComponents(self):
+        calendar = QCalendarWidget(self)
+        calendar.setGeometry(50, 50, 400, 250)
+
+
+App = QApplication(sys.argv)
+window = Window()
+sys.exit(App.exec())
